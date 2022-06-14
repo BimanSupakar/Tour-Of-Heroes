@@ -73,24 +73,59 @@ describe('HeroesComponent', () => {
   it("Clicking the delete button removes the hero from the list and calls deleteHero", () => {
     const heroServiceStub = TestBed.get(HeroService);
     spyOn(heroServiceStub, "deleteHero");
-  
+
     const delButton: HTMLButtonElement = fixture.debugElement.query(
       By.css("button.delete")
     ).nativeElement;
     delButton.click();
     fixture.detectChanges();
-  
+
     const links: Array<HTMLAnchorElement> = fixture.debugElement
       .queryAll(By.css("a"))
       .map((a) => a.nativeElement);
-  
+
     expect(links.length).toBe(1);
     expect(links[0].textContent).toContain("2 Brito");
     expect(links[0].getAttribute("href")).toBe("/detail/2");
-  
+
     expect(heroServiceStub.deleteHero).toHaveBeenCalled();
   });
 
 
+  //ADD
+  it("Clicking the add button on a an empty textbox doesn't add to the list", () => {
+    const heroServiceStub = TestBed.get(HeroService);
+    spyOn(heroServiceStub, "addHero");
 
+    const addButton: HTMLButtonElement = fixture.debugElement.query(
+      By.css("div > button")
+    ).nativeElement;
+    addButton.click();
+    fixture.detectChanges();
+
+    expect(heroServiceStub.addHero).not.toHaveBeenCalled();
+  });
+
+  
+
+  //Clicking the add button on textbox with blank spaces doesn’t add to the list
+  it("Clicking the add button on textbox with blank spaces doesn't add to the list", () => {
+    const heroServiceStub = TestBed.get(HeroService);
+    spyOn(heroServiceStub, "addHero");
+  
+    const input: HTMLInputElement = fixture.debugElement.query(
+      By.css("input")
+    ).nativeElement;
+  
+    input.value = "   ";
+    input.dispatchEvent(new Event("input"));
+  
+    const addButton: HTMLButtonElement = fixture.debugElement.query(
+      By.css("div > button")
+    ).nativeElement;
+    addButton.click();
+    fixture.detectChanges();
+  
+    expect(heroServiceStub.addHero).not.toHaveBeenCalled();
+  });
 });

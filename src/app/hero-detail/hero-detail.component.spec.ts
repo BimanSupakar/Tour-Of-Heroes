@@ -4,7 +4,6 @@ import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { HeroService } from '../hero.service';
-
 import { HeroDetailComponent } from './hero-detail.component';
 
 describe('HeroDetailComponent', () => {
@@ -54,5 +53,18 @@ describe('HeroDetailComponent', () => {
     expect(div.textContent).toContain("id: 123");
   });
 
-  
+
+  it("Has header with hero name in uppercase", () => {
+    const header: HTMLHeadingElement = fixture.debugElement.query(
+      By.css("h2")
+    ).nativeElement;
+    expect(header.textContent).toContain("ALAN Details");
+  });
+
+  it("Shows hero id", () => {
+    const div: HTMLDivElement = fixture.debugElement.query(
+      By.css("div div") // first inner div
+    ).nativeElement;
+    expect(div.textContent).toContain("id: 123");
+  });
 });
